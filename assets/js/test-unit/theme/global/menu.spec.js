@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import menuFactory from '../../../theme/global/menu';
 import $ from 'jquery';
 
