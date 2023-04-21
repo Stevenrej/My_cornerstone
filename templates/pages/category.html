@@ -13,7 +13,6 @@ category:
         <link rel="next" href="{{pagination.category.next}}">
     {{/if}}
 {{/partial}}
-
 {{#partial "page"}}
 
 {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
@@ -27,6 +26,11 @@ category:
 {{/if}}
 {{#unless theme_settings.hide_category_page_heading }}
     <h1 class="page-heading">{{category.name}}</h1>
+    {{!-- Add the Add All To Cart button --}}
+    <button id="add-all-to-cart" data-button-type="add-cart" data-event-type="product-click" class="button button--primary">{{lang 'Add All To Cart'}}</button>
+    {{!-- Add the Delete All From Cart button --}}
+    <button id="delete-all-from-cart" data-button-type="delete-cart" data-event-type="product-click" class="button button--secondary hidden">{{lang 'Remove All Items'}}</button>
+
     {{{region name="category_below_header"}}}
 {{/unless}}
 {{{category.description}}}

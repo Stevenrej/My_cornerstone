@@ -56,6 +56,7 @@ These page types will correspond to the pages within your theme. Each one of the
 ```
 
 ### JS Template Context Injection
+
 Occasionally you may need to use dynamic data from the template context within your client-side theme application code.
 
 Two helpers are provided to help achieve this.

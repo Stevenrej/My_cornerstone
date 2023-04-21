@@ -1,3 +1,4 @@
+
 <article
     class="card
     {{#if alternate}} card--alternate{{/if}}"
@@ -85,15 +86,28 @@
            aria-label="{{> components/products/product-info}}"
            {{#if settings.data_tag_enabled}} data-event-type="product-click" {{/if}}
         >
-            <div class="card-img-container">
+        <div class="card-img-container">
+            {{#with images.[0]}}
                 {{> components/common/responsive-img
-                    image=image
-                    class="card-image"
+                    image=this
+                    class="card-image main-image"
                     fallback_size=theme_settings.productgallery_size
                     lazyload=theme_settings.lazyload_mode
                     default_image=theme_settings.default_image_product
                 }}
-            </div>
+            {{/with}}
+            {{#with images.[1]}}
+                {{> components/common/responsive-img
+                    image=this
+                    class="card-image secondary-image"
+                    fallback_size=theme_settings.productgallery_size
+                    lazyload=theme_settings.lazyload_mode
+                    default_image=theme_settings.default_image_product
+                }}
+            {{/with}}
+        </div>
+        
+        
         </a>
 
         <figcaption class="card-figcaption">
@@ -159,4 +173,6 @@
         </div>
         {{> components/products/bulk-discount-rates}}
     </div>
+    
+     
 </article>

@@ -13,6 +13,10 @@ import cartPreview from './global/cart-preview';
 import privacyCookieNotification from './global/cookieNotification';
 import carousel from './common/carousel';
 import svgInjector from './global/svg-injector';
+import addAllToCart from './global/add-all-to-cart';
+import { deleteAllFromCart } from './global/delete-all-from-cart';
+import showRemoveAllButtonIfCartHasItems from './global/show-button';
+import showNotification from './global/notification';
 
 export default class Global extends PageManager {
     onReady() {
@@ -27,5 +31,9 @@ export default class Global extends PageManager {
         mobileMenuToggle();
         privacyCookieNotification();
         svgInjector();
+        addAllToCart();
+        deleteAllFromCart();
+        showRemoveAllButtonIfCartHasItems();
+        showNotification();
     }
 }

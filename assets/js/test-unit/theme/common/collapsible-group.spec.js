@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable no-undef */
 import collapsibleGroupFactory from '../../../theme/common/collapsible-group';
 import { CollapsibleEvents } from '../../../theme/common/collapsible';
 import $ from 'jquery';
