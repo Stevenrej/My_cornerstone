@@ -2,6 +2,7 @@ export default function showNotification(message, timeout = 5000) {
     if (!message || message.trim() === '') {
         return;
     }
+
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.textContent = message;
@@ -23,7 +24,6 @@ export default function showNotification(message, timeout = 5000) {
         notification.remove();
     }, timeout);
 }
-
 
 document.addEventListener('cart-emptied', () => {
     showNotification('Your cart has been emptied.');
