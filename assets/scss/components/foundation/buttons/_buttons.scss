@@ -29,3 +29,16 @@
     display: none;
 }
 
+#add-all-to-cart.is-adding {
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;
+}
+
+#delete-all-from-cart.is-deleting {
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;
+}
+
+
