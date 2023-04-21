@@ -402,6 +402,7 @@ export default class ProductDetails extends ProductDetailsBase {
             return;
         }
 
+
         // Prevent default
         event.preventDefault();
 
