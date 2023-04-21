@@ -173,13 +173,6 @@
         </div>
         {{> components/products/bulk-discount-rates}}
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var jsonString = '{{json this}}';
-            jsonString = jsonString.replace(/&quot;/g, '"');
-            console.log(JSON.stringify(JSON.parse(jsonString), null, 2));
-        });
-    </script>
     
      
 </article>
