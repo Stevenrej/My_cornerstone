@@ -13,17 +13,21 @@
 .banners {
     background-color: stencilColor("color-primary");
     color: stencilColor("color-white");
-    padding: spacing("half") 0;
+    padding: spacing("half");
     text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: spacing("single");
 
     p:last-child {
-        margin-bottom: 0;
+        margin-bottom: 0px;
     }
 
     a {
         color: color("whites", "bright");
     }
 }
+
 
 .banner {
     @include grid-row;
