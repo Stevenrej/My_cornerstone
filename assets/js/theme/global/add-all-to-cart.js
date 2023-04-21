@@ -2,21 +2,24 @@ import 'regenerator-runtime/runtime';
 
 export default function addAllToCart() {
     const addAllToCartBtn = document.querySelector('#add-all-to-cart');
+    if (!addAllToCartBtn) return;
 
     addAllToCartBtn.addEventListener('click', async () => {
+        addAllToCartBtn.disabled = true;
+        addAllToCartBtn.textContent = 'Adding...';
+        addAllToCartBtn.classList.add('is-adding');
+
         const productIds = [];
         const productIdList = [];
         const cards = document.querySelectorAll('.card');
 
-        cards.forEach((card) => {
+        cards.forEach(card => {
             const productId = card.querySelector('[data-product-id]').dataset.productId;
             if (productId) {
                 productIds.push(productId);
                 productIdList.push(productId);
             }
         });
-
-        console.log('Product IDs to add:', productIds);
 
         const cartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
         const cartData = await cartResponse.json();
@@ -28,54 +31,17 @@ export default function addAllToCart() {
                 productId: productIds[0],
             }];
 
-            const options = {
+            const createCartOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ lineItems, locale: 'en' }),
             };
 
-            const createCartResponse = await fetch('http://localhost:3001/api/storefront/carts', options);
+            const createCartResponse = await fetch('http://localhost:3001/api/storefront/carts', createCartOptions);
             cart = await createCartResponse.json();
-
-            console.log('Cart created:', cart);
-
-            productIds.shift(); // Remove the first product from the array
-        } else {
-            console.log('Cart found:', cart);
+            productIds.shift();
         }
 
-        console.log('Remaining productIds to add:', productIds);
-
-        const addProductsToCart = async (ids) => {
-            const requests = ids.map((productId) => {
-                const lineItemsAdd = [{
-                    quantity: 1,
-                    productId,
-                    variantId: null,
-                    optionSelections: [],
-                }];
-
-                const optionsAdd = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ lineItems: lineItemsAdd, locale: 'en' }),
-                };
-
-                console.log(`Adding item ${productId} to cart...`);
-
-                return fetch(`http://localhost:3001/api/storefront/carts/${cart.id}/items`, optionsAdd);
-            });
-
-            const results = await Promise.all(requests);
-
-            results.forEach((response, index) => {
-                if (!response.ok) {
-                    throw new Error('Error adding item to cart');
-                }
-                console.log(`Item ${ids[index]} added to cart successfully.`);
-                document.dispatchEvent(new CustomEvent('cart-item-add'));
-            });
-        };
         function extractProductNames(newCart, listOfIds) {
             const allItems = [
                 ...newCart.physicalItems,
@@ -84,40 +50,43 @@ export default function addAllToCart() {
                 ...newCart.giftCertificates,
             ];
 
-            console.log(allItems, 'allItems');
-            console.log(listOfIds, 'listOfIds');
-
             const matchingItems = allItems.filter(item => listOfIds.includes(item.productId.toString()));
 
             return matchingItems.map(item => item.name);
         }
 
-
         try {
-            await addProductsToCart(productIds);
+            if (productIds.length) {
+                const lineItemsToAdd = productIds.map(productId => ({
+                    quantity: 1,
+                    productId,
+                    variantId: null,
+                    optionSelections: [],
+                }));
 
-            console.log(productIdList);
+                const optionsAdd = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ lineItems: lineItemsToAdd, locale: 'en' }),
+                };
 
-            // Fetch the updated cart
+                await fetch(`http://localhost:3001/api/storefront/carts/${cart.id}/items`, optionsAdd);
+            }
+
             const updatedCartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
             const updatedCartData = await updatedCartResponse.json();
             const updatedCart = updatedCartData[0].lineItems;
-
-            console.log(updatedCart, 'updatedCart');
-
-
             const productNames = extractProductNames(updatedCart, productIdList);
 
-            console.log(productNames, 'productNames');
-
-
-            if (productNames) {
+            if (productNames.length) {
                 document.dispatchEvent(new CustomEvent('cart-updated', { detail: productNames }));
             }
-
-            console.log('Attempted to add all items to cart.');
         } catch (error) {
-            console.error('Error adding items to cart:', error.message);
+            // console.error(error);
         }
+
+        addAllToCartBtn.disabled = false;
+        addAllToCartBtn.textContent = 'Add All to Cart';
+        addAllToCartBtn.classList.remove('is-adding');
     });
 }
