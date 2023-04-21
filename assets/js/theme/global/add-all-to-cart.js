@@ -21,7 +21,7 @@ export default function addAllToCart() {
             }
         });
 
-        const cartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
+        const cartResponse = await fetch('https://trial-store-g8.mybigcommerce.com/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
         const cartData = await cartResponse.json();
         let cart = cartData[0];
 
@@ -37,7 +37,7 @@ export default function addAllToCart() {
                 body: JSON.stringify({ lineItems, locale: 'en' }),
             };
 
-            const createCartResponse = await fetch('http://localhost:3001/api/storefront/carts', createCartOptions);
+            const createCartResponse = await fetch('https://trial-store-g8.mybigcommerce.com/api/storefront/carts', createCartOptions);
             cart = await createCartResponse.json();
             productIds.shift();
         }
@@ -70,10 +70,10 @@ export default function addAllToCart() {
                     body: JSON.stringify({ lineItems: lineItemsToAdd, locale: 'en' }),
                 };
 
-                await fetch(`http://localhost:3001/api/storefront/carts/${cart.id}/items`, optionsAdd);
+                await fetch(`https://trial-store-g8.mybigcommerce.com/api/storefront/carts/${cart.id}/items`, optionsAdd);
             }
 
-            const updatedCartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
+            const updatedCartResponse = await fetch('https://trial-store-g8.mybigcommerce.com/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
             const updatedCartData = await updatedCartResponse.json();
             const updatedCart = updatedCartData[0].lineItems;
             const productNames = extractProductNames(updatedCart, productIdList);

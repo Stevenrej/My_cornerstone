@@ -6,7 +6,7 @@ export default async function showRemoveAllButtonIfCartHasItems() {
     }
 
     try {
-        const cartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
+        const cartResponse = await fetch('https://trial-store-g8.mybigcommerce.com/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
         const cartData = await cartResponse.json();
         const cart = cartData[0];
 

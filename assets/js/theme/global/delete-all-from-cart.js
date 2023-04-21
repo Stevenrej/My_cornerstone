@@ -11,7 +11,7 @@ export function deleteAllFromCart() {
             deleteAllFromCartBtn.textContent = 'Removing...';
             deleteAllFromCartBtn.classList.add('is-deleting');
 
-            const cartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
+            const cartResponse = await fetch('https://trial-store-g8.mybigcommerce.com/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
             const cartData = await cartResponse.json();
             const cart = cartData[0];
 
@@ -31,7 +31,7 @@ export function deleteAllFromCart() {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                 };
-                return fetch(`http://localhost:3001/api/storefront/carts/${cart.id}/items/${itemId}`, options);
+                return fetch(`https://trial-store-g8.mybigcommerce.com/api/storefront/carts/${cart.id}/items/${itemId}`, options);
             });
 
             await Promise.all(deleteItemsPromises);
@@ -42,7 +42,7 @@ export function deleteAllFromCart() {
                     headers: { 'Content-Type': 'application/json' },
                 };
 
-                const response = await fetch(`http://localhost:3001/api/storefront/carts/${cart.id}`, options);
+                const response = await fetch(`https://trial-store-g8.mybigcommerce.com/api/storefront/carts/${cart.id}`, options);
 
                 if (response.ok) {
                     document.dispatchEvent(new CustomEvent('cart-emptied'));

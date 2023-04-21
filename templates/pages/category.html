@@ -15,6 +15,15 @@ category:
 {{/partial}}
 {{#partial "page"}}
 
+{{!-- Add the customer banner --}}
+{{#if customer}}
+<div class="banners banner">
+        <p>Welcome, {{customer.name}}!</p>
+        <p>Email: {{customer.email}}</p>
+        <p>Phone: {{customer.phone}}</p>
+    </div>
+{{/if}}
+
 {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
 {{#if category.image}}
     {{> components/common/responsive-img
