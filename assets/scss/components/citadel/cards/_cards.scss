@@ -23,6 +23,11 @@
             opacity: 1;
         }
     }
+    &:hover {
+        .secondary-image {
+            display: block;
+        }
+    }
 }
 
 .card-figure {
@@ -57,11 +62,6 @@
         height: 100%;
     }
 
-    &:hover {
-        .secondary-image {
-            display: block;
-        }
-    }
 }
 
 .card-figcaption {
