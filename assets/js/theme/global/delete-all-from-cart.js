@@ -1,41 +1,63 @@
 export function deleteAllFromCart() {
     const deleteAllFromCartBtn = document.querySelector('#delete-all-from-cart');
 
+    if (!deleteAllFromCartBtn) {
+        return;
+    }
+
     deleteAllFromCartBtn.addEventListener('click', async () => {
-        // Fetch the current cart
-        const cartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
-        const cartData = await cartResponse.json();
-        const cart = cartData[0];
+        try {
+            deleteAllFromCartBtn.disabled = true;
+            deleteAllFromCartBtn.textContent = 'Removing...';
+            deleteAllFromCartBtn.classList.add('is-deleting');
 
-        if (!cart) {
-            return;
-        }
+            const cartResponse = await fetch('http://localhost:3001/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options');
+            const cartData = await cartResponse.json();
+            const cart = cartData[0];
 
-        const itemIds = cart.lineItems.physicalItems.map(item => item.id).concat(cart.lineItems.digitalItems.map(item => item.id));
+            if (!cart) {
+                return;
+            }
 
-        // Delete all items from the cart
-        const deleteItemsPromises = itemIds.map(itemId => {
-            const options = {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-            };
-            return fetch(`http://localhost:3001/api/storefront/carts/${cart.id}/items/${itemId}`, options);
-        });
+            const itemIds = cart.lineItems.physicalItems.map(item => item.id).concat(cart.lineItems.digitalItems.map(item => item.id));
 
-        await Promise.all(deleteItemsPromises);
+            if (itemIds.length === 0) {
+                // console.error('Error: no items to delete from cart.');
+                return;
+            }
 
-        // Delete the cart itself
-        const options = {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-        };
+            const deleteItemsPromises = itemIds.map(itemId => {
+                const options = {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                };
+                return fetch(`http://localhost:3001/api/storefront/carts/${cart.id}/items/${itemId}`, options);
+            });
 
-        const response = await fetch(`http://localhost:3001/api/storefront/carts/${cart.id}`, options);
+            await Promise.all(deleteItemsPromises);
 
-        if (response.ok) {
-            document.dispatchEvent(new CustomEvent('cart-emptied'));
-        } else {
-            console.error(`Error deleting cart ${cart.id}.`);
+            if (itemIds.length > 1) {
+                const options = {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                };
+
+                const response = await fetch(`http://localhost:3001/api/storefront/carts/${cart.id}`, options);
+
+                if (response.ok) {
+                    document.dispatchEvent(new CustomEvent('cart-emptied'));
+                } else {
+                    // console.error(`Error deleting cart ${cart.id}.`);
+                }
+            } else {
+                document.dispatchEvent(new CustomEvent('cart-emptied'));
+            }
+        } catch (error) {
+            // console.error('Error removing items from cart:', error.message);
+        } finally {
+            deleteAllFromCartBtn.disabled = false;
+            deleteAllFromCartBtn.textContent = 'Delete All from Cart';
+            deleteAllFromCartBtn.classList.remove('is-deleting');
         }
     });
 }
