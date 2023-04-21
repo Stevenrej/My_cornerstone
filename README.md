@@ -1,4 +1,4 @@
-# My Cornerstone Theme
+# Test Cornerstone Theme
 
 [Link to Deployed site](https://trial-store-g8.mybigcommerce.com/?ctk=078ad157-1896-4fd1-af90-dd1830778811)
 
